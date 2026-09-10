@@ -1,0 +1,7 @@
+# Resource data file
+# Format: id,name,type,capacity
+R001,Conference Room A,Room,1
+R002,Study Room B,Room,2
+R003,Projector,Equipment,3
+R004,Laptop Cart,Equipment,5
+R005,Lecture Hall 100,Room,1
