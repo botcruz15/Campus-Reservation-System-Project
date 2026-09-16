@@ -7,6 +7,7 @@
 #include "Resource.h"
 #include "ReservationList.h"
 #include "CancellationHistory.h"
+#include "WaitingList.h"
 
 static std::string generateReservationID(int& counter) {
     counter++;
