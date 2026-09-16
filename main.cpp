@@ -54,7 +54,7 @@ int main() {
 
     int reservationCounter = 0;
 
-    const std::string dataFile = "data/resources.txt";
+    const std::string dataFile = "resources.txt";
 
 
 
