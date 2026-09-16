@@ -8,8 +8,8 @@ A new reservation is inserted at the beginning of the linked list. Since the lis
 ### Reservation Removal—O(n)
 Removing a reservation may require traversing the linked list to find the matching reservation.
 
-### Waiting List Processing—O(1)
-The waiting list uses a queue. Students are added to the rear and removed from the front, so these operations take constant time.
+### Waiting List Processing—O(n)
+Students are added to the rear of the queue in O(1) time. When a resource becomes available, the waiting list may need to be traversed to find the first student waiting for that resource. In the worst case, this takes O(n) time.
 
 ### Undo Cancellation—O(1)
 Cancellation history uses a stack. The most recently cancelled reservation is stored at the top and it can be restored using a pop operation in constant time.
