@@ -41,6 +41,9 @@ static void clearInputError() {
 int main() {
     ResourceManager resourceManager;
     ReservationList reservationList;
+    WaitingList waitinglist;
+    CancellationHistory cancellationhistory:
+    
     int reservationCounter = 0;
     const std::string dataFile = "data/resources.txt";
 
@@ -94,10 +97,16 @@ int main() {
 
                 Resource* res = resourceManager.findResource(resourceID);
                 if (res->availableCount <= 0) {
-                    std::cout << "Error: resource '" << resourceID
-                              << "' is fully booked. No availability.\n";
-                    break;
-                }
+
+                        waitingList.enqueue(studentID, resourceID, timeSlot);
+
+                        std::cout << "Resource '" << resourceID
+                          << "' is fully booked.\n";
+
+                        std::cout << "Student added to the waiting list.\n";
+
+    break;
+}
 
                 std::string newID = generateReservationID(reservationCounter);
                 resourceManager.decrementAvailability(resourceID);
@@ -110,17 +119,23 @@ int main() {
                 std::cout << "Enter reservation ID to cancel: ";
                 reservationID = readLine();
 
-                ReservationNode removed;
-                bool found = reservationList.removeReservation(reservationID, removed);
+               ReservationNode removed;
+
+                bool found =
+                    reservationList.removeReservation(reservationID, removed);
+
                 if (!found) {
-                    std::cout << "Error: no active reservation found with ID '"
-                              << reservationID << "'.\n";
+                std::cout << "Error: no active reservation found with ID '"
+              << reservationID << "'.\n";
                     break;
-                }
+        }
+
+            cancellationHistory.pushCancellation(removed);
 
                 resourceManager.incrementAvailability(removed.resourceID);
-                std::cout << "Reservation '" << reservationID << "' cancelled.\n";
-                break;
+
+            std::cout << "Reservation '" << reservationID
+                  << "' cancelled.\n";
             }
             case 5: {
                 reservationList.displayReservations();
