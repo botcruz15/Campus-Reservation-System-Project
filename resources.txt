@@ -1,7 +1,10 @@
 # Resource data file
 # Format: id,name,type,capacity
-R001,Conference Room A,Room,1
-R002,Study Room B,Room,2
-R003,Projector,Equipment,3
-R004,Laptop Cart,Equipment,5
-R005,Lecture Hall 100,Room,1
+
+R001,Library Study Room 101,Room,1
+R002,Engineering Study Room,Room,2
+R003,Dell Laptop,Equipment,3
+R004,TI-84 Calculator,Equipment,5
+R005,Tutoring Room 204,Room,1
+R006,Portable Projector,Equipment,2
+R007,Computer Lab Station,Equipment,4
