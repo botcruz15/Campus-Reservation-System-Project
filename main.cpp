@@ -6,6 +6,7 @@
 #include <limits>
 #include "Resource.h"
 #include "ReservationList.h"
+#include "CancellationHistory.h"
 
 static std::string generateReservationID(int& counter) {
     counter++;
