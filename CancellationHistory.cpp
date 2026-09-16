@@ -14,6 +14,8 @@ CancellationHistory::~CancellationHistory() {
     }
 
     top = nullptr;
+
+    count = 0;
 }
 
 void CancellationHistory::pushCancellation(const ReservationNode& reservation) {
