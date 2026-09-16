@@ -38,7 +38,10 @@ static std::string readLine() {
 
 static void clearInputError() {
     std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore(
+        std::numeric_limits<std::streamsize>::max(),
+        '\n'
+    );
 }
 
 
@@ -53,37 +56,50 @@ int main() {
 
     const std::string dataFile = "data/resources.txt";
 
-    // Load resource information
+
+
     if (!resourceManager.loadFromFile(dataFile)) {
-        std::cout << "Could not load '" << dataFile
+
+        std::cout << "Could not load '"
+                  << dataFile
                   << "'. Starting with zero resources.\n";
     }
     else {
-        std::cout << "Loaded " << resourceManager.getResourceCount()
-                  << " resource(s) from " << dataFile << "\n";
+
+        std::cout << "Loaded "
+                  << resourceManager.getResourceCount()
+                  << " resource(s) from "
+                  << dataFile << "\n";
     }
 
 
     int choice = -1;
 
+
     while (choice != 0) {
 
         printMenu();
 
+
         if (!(std::cin >> choice)) {
-            std::cout << "Invalid input. Please enter a number.\n";
+
+            std::cout
+                << "Invalid input. Please enter a number.\n";
+
             clearInputError();
+
             continue;
         }
 
+
         std::cin.ignore(
-            std::numeric_limits<std::streamsize>::max(), '\n'
+            std::numeric_limits<std::streamsize>::max(),
+            '\n'
         );
 
 
         switch (choice) {
 
-            // Display resources
             case 1: {
 
                 resourceManager.displayAllResources();
@@ -92,7 +108,7 @@ int main() {
             }
 
 
-            // Display availability
+
             case 2: {
 
                 resourceManager.displayAvailability();
@@ -101,39 +117,44 @@ int main() {
             }
 
 
-            // Create reservation
             case 3: {
 
                 std::string studentID;
                 std::string resourceID;
                 std::string timeSlot;
 
+
                 std::cout << "Enter student ID: ";
                 studentID = readLine();
+
 
                 std::cout << "Enter resource ID: ";
                 resourceID = readLine();
 
-                std::cout << "Enter time slot (e.g. Mon-9AM): ";
+
+                std::cout
+                    << "Enter time slot (e.g. Mon-9AM): ";
+
                 timeSlot = readLine();
 
 
-                // Make sure all fields were entered
                 if (studentID.empty() ||
                     resourceID.empty() ||
                     timeSlot.empty()) {
 
-                    std::cout << "Error: all fields are required.\n";
+                    std::cout
+                        << "Error: all fields are required.\n";
+
                     break;
                 }
 
 
-                // Check if resource exists
                 if (!resourceManager.resourceExists(resourceID)) {
 
-                    std::cout << "Error: resource '"
-                              << resourceID
-                              << "' does not exist.\n";
+                    std::cout
+                        << "Error: resource '"
+                        << resourceID
+                        << "' does not exist.\n";
 
                     break;
                 }
@@ -143,7 +164,6 @@ int main() {
                     resourceManager.findResource(resourceID);
 
 
-                // If resource is full, add student to waiting list
                 if (res->availableCount <= 0) {
 
                     waitingList.enqueue(
@@ -152,21 +172,31 @@ int main() {
                         timeSlot
                     );
 
-                    std::cout << "Resource '"
-                              << resourceID
-                              << "' is fully booked.\n";
 
-                    std::cout << "Student added to the waiting list.\n";
+                    std::cout
+                        << "Resource '"
+                        << resourceID
+                        << "' is fully booked.\n";
+
+
+                    std::cout
+                        << "Student added to the waiting list.\n";
+
 
                     break;
                 }
 
 
-                // Create reservation
                 std::string newID =
-                    generateReservationID(reservationCounter);
+                    generateReservationID(
+                        reservationCounter
+                    );
 
-                resourceManager.decrementAvailability(resourceID);
+
+                resourceManager.decrementAvailability(
+                    resourceID
+                );
+
 
                 reservationList.insertReservation(
                     newID,
@@ -175,24 +205,30 @@ int main() {
                     timeSlot
                 );
 
-                std::cout << "Reservation created successfully. "
-                          << "Reservation ID: "
-                          << newID << "\n";
+
+                std::cout
+                    << "Reservation created successfully. "
+                    << "Reservation ID: "
+                    << newID << "\n";
+
 
                 break;
             }
 
 
-            // Cancel reservation
             case 4: {
 
                 std::string reservationID;
 
-                std::cout << "Enter reservation ID to cancel: ";
+
+                std::cout
+                    << "Enter reservation ID to cancel: ";
+
                 reservationID = readLine();
 
 
                 ReservationNode removed;
+
 
                 bool found =
                     reservationList.removeReservation(
@@ -212,76 +248,67 @@ int main() {
                 }
 
 
-                // Store cancelled reservation on stack
-                cancellationHistory.pushCancellation(removed);
+                cancellationHistory.pushCancellation(
+                    removed
+                );
 
-                // Resource becomes available again
                 resourceManager.incrementAvailability(
                     removed.resourceID
                 );
 
 
-                std::cout << "Reservation '"
-                          << reservationID
-                          << "' cancelled.\n";
+                std::cout
+                    << "Reservation '"
+                    << reservationID
+                    << "' cancelled.\n";
+
 
                 std::cout
                     << "Reservation added to cancellation history.\n";
 
+                WaitingNode nextStudent;
 
-                // Process first student in waiting queue
-                if (!waitingList.isEmpty()) {
 
-                    WaitingNode nextStudent;
+                if (waitingList.dequeueForResource(
+                        removed.resourceID,
+                        nextStudent)) {
 
-                    if (waitingList.dequeue(nextStudent)) {
 
-                        // Only automatically reserve if this student
-                        // was waiting for the resource that opened up
-                        if (nextStudent.resourceID == removed.resourceID) {
+                    std::string newID =
+                        generateReservationID(
+                            reservationCounter
+                        );
 
-                            std::string newID =
-                                generateReservationID(
-                                    reservationCounter
-                                );
 
-                            resourceManager.decrementAvailability(
-                                nextStudent.resourceID
-                            );
+                    resourceManager.decrementAvailability(
+                        nextStudent.resourceID
+                    );
 
-                            reservationList.insertReservation(
-                                newID,
-                                nextStudent.studentID,
-                                nextStudent.resourceID,
-                                nextStudent.timeSlot
-                            );
 
-                            std::cout
-                                << "Next student in the waiting list "
-                                << "received the resource.\n";
+                    reservationList.insertReservation(
+                        newID,
+                        nextStudent.studentID,
+                        nextStudent.resourceID,
+                        nextStudent.timeSlot
+                    );
 
-                            std::cout
-                                << "New Reservation ID: "
-                                << newID << "\n";
-                        }
-                        else {
 
-                            // Student was waiting for another resource,
-                            // so put them back in the queue.
-                            waitingList.enqueue(
-                                nextStudent.studentID,
-                                nextStudent.resourceID,
-                                nextStudent.timeSlot
-                            );
-                        }
-                    }
+                    std::cout
+                        << "Student "
+                        << nextStudent.studentID
+                        << " was next on the waiting list.\n";
+
+
+                    std::cout
+                        << "Reservation created automatically. "
+                        << "Reservation ID: "
+                        << newID << "\n";
                 }
+
 
                 break;
             }
 
-
-            // Display active reservations
             case 5: {
 
                 reservationList.displayReservations();
@@ -290,7 +317,6 @@ int main() {
             }
 
 
-            // Display waiting list
             case 6: {
 
                 waitingList.displayWaitingList();
@@ -299,7 +325,6 @@ int main() {
             }
 
 
-            // Display cancellation history
             case 7: {
 
                 cancellationHistory.displayHistory();
@@ -308,12 +333,13 @@ int main() {
             }
 
 
-            // Undo most recent cancellation
             case 8: {
 
                 ReservationNode restored;
 
-                if (!cancellationHistory.popCancellation(restored)) {
+
+                if (!cancellationHistory.popCancellation(
+                        restored)) {
 
                     std::cout
                         << "No cancelled reservations to restore.\n";
@@ -334,12 +360,14 @@ int main() {
                         << "Could not restore reservation. "
                         << "Resource does not exist.\n";
 
-                    // Put it back because restore failed
-                    cancellationHistory.pushCancellation(restored);
+
+                    cancellationHistory.pushCancellation(
+                        restored
+                    );
+
 
                     break;
                 }
-
 
                 if (res->availableCount <= 0) {
 
@@ -347,8 +375,11 @@ int main() {
                         << "Could not restore reservation. "
                         << "Resource is currently unavailable.\n";
 
-                    // Put cancellation back onto stack
-                    cancellationHistory.pushCancellation(restored);
+
+                    cancellationHistory.pushCancellation(
+                        restored
+                    );
+
 
                     break;
                 }
@@ -357,6 +388,7 @@ int main() {
                 resourceManager.decrementAvailability(
                     restored.resourceID
                 );
+
 
                 reservationList.insertReservation(
                     restored.reservationID,
@@ -371,11 +403,11 @@ int main() {
                     << restored.reservationID
                     << "' restored successfully.\n";
 
+
                 break;
             }
 
 
-            // Exit
             case 0: {
 
                 std::cout
