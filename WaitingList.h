@@ -1,210 +1,72 @@
-#include "WaitingList.h"
-#include <iostream>
+#ifndef WAITING_LIST_H
+#define WAITING_LIST_H
 
+#include <string>
 
-WaitingList::WaitingList()
-    : front(nullptr), rear(nullptr), count(0) {
-}
 
 
-WaitingList::~WaitingList() {
+struct WaitingNode {
 
-    WaitingNode* current = front;
+    std::string studentID;
+    std::string resourceID;
+    std::string timeSlot;
 
+    WaitingNode* next;
+};
 
-    while (current != nullptr) {
 
-        WaitingNode* toDelete = current;
+class WaitingList {
 
-        current = current->next;
+private:
 
-        delete toDelete;
-    }
+    WaitingNode* front;
+    WaitingNode* rear;
 
+    int count;
 
-    front = nullptr;
-    rear = nullptr;
 
-    count = 0;
-}
+public:
 
+ 
+    WaitingList();
 
-void WaitingList::enqueue(
-    const std::string& studentID,
-    const std::string& resourceID,
-    const std::string& timeSlot) {
 
-    WaitingNode* newNode =
-        new WaitingNode();
 
+    ~WaitingList();
 
-    newNode->studentID = studentID;
-    newNode->resourceID = resourceID;
-    newNode->timeSlot = timeSlot;
 
-    newNode->next = nullptr;
+ 
+    void enqueue(
+        const std::string& studentID,
+        const std::string& resourceID,
+        const std::string& timeSlot
+    );
 
 
-    if (rear == nullptr) {
 
-        front = newNode;
-        rear = newNode;
-    }
-    else {
+    bool dequeue(
+        WaitingNode& removedStudent
+    );
 
-        rear->next = newNode;
 
-        rear = newNode;
-    }
+  
+    bool dequeueForResource(
+        const std::string& resourceID,
+        WaitingNode& removedStudent
+    );
 
 
-    count++;
-}
 
+    void displayWaitingList() const;
 
-bool WaitingList::dequeue(
-    WaitingNode& removedStudent) {
 
-    if (front == nullptr) {
 
-        return false;
-    }
+    bool isEmpty() const;
 
 
-    WaitingNode* temp = front;
+  
+    int getCount() const;
+};
 
 
-    removedStudent = *front;
-
-    removedStudent.next = nullptr;
-
-
-    front = front->next;
-
-
-    if (front == nullptr) {
-
-        rear = nullptr;
-    }
-
-
-    delete temp;
-
-    count--;
-
-
-    return true;
-}
-
-
-bool WaitingList::dequeueForResource(
-    const std::string& resourceID,
-    WaitingNode& removedStudent) {
-
-    if (front == nullptr) {
-
-        return false;
-    }
-
-
-    WaitingNode* current = front;
-    WaitingNode* previous = nullptr;
-
-
-    while (current != nullptr) {
-
-        if (current->resourceID == resourceID) {
-
-            removedStudent = *current;
-
-            removedStudent.next = nullptr;
-
-
-            if (previous == nullptr) {
-
-                front = current->next;
-            }
-            else {
-
-                previous->next = current->next;
-            }
-
-
-            if (current == rear) {
-
-                rear = previous;
-            }
-
-
-            delete current;
-
-            count--;
-
-            return true;
-        }
-
-
-        previous = current;
-
-        current = current->next;
-    }
-
-
-    return false;
-}
-
-
-void WaitingList::displayWaitingList() const {
-
-    if (front == nullptr) {
-
-        std::cout
-            << "No students are currently waiting.\n";
-
-        return;
-    }
-
-
-    std::cout
-        << "\n--- Waiting List ---\n";
-
-
-    WaitingNode* current = front;
-
-    int position = 1;
-
-
-    while (current != nullptr) {
-
-        std::cout
-            << position << ". "
-
-            << "Student ID: "
-            << current->studentID
-
-            << " | Resource: "
-            << current->resourceID
-
-            << " | Time Slot: "
-            << current->timeSlot
-
-            << "\n";
-
-
-        current = current->next;
-
-        position++;
-    }
-}
-
-
-bool WaitingList::isEmpty() const {
-
-    return front == nullptr;
-}
-
-
-int WaitingList::getCount() const {
-
-    return count;
-}
+#endif
