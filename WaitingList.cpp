@@ -7,7 +7,6 @@ WaitingList::WaitingList()
 }
 
 
-
 WaitingList::~WaitingList() {
 
     WaitingNode* current = front;
@@ -26,7 +25,6 @@ WaitingList::~WaitingList() {
 }
 
 
-
 void WaitingList::enqueue(
     const std::string& studentID,
     const std::string& resourceID,
@@ -38,7 +36,6 @@ void WaitingList::enqueue(
     newNode->resourceID = resourceID;
     newNode->timeSlot = timeSlot;
     newNode->next = nullptr;
-
 
 
     if (rear == nullptr) {
@@ -56,14 +53,12 @@ void WaitingList::enqueue(
 }
 
 
-
 bool WaitingList::dequeue(
     WaitingNode& removedStudent) {
 
     if (front == nullptr) {
         return false;
     }
-
 
     WaitingNode* temp = front;
 
@@ -73,18 +68,16 @@ bool WaitingList::dequeue(
     front = front->next;
 
 
-
     if (front == nullptr) {
         rear = nullptr;
     }
 
-
     delete temp;
+
     count--;
 
     return true;
 }
-
 
 
 bool WaitingList::dequeueForResource(
@@ -96,21 +89,20 @@ bool WaitingList::dequeueForResource(
         return false;
     }
 
-
     WaitingNode* current = front;
     WaitingNode* previous = nullptr;
 
 
-
     while (current != nullptr) {
 
-        if (current->resourceID == resourceID) {
+        if (current->resourceID == resourceID &&
+            current->timeSlot == timeSlot) {
 
             removedStudent = *current;
             removedStudent.next = nullptr;
 
 
-
+      
             if (previous == nullptr) {
 
                 front = current->next;
@@ -121,7 +113,7 @@ bool WaitingList::dequeueForResource(
             }
 
 
-     
+         
             if (current == rear) {
 
                 rear = previous;
@@ -129,6 +121,7 @@ bool WaitingList::dequeueForResource(
 
 
             delete current;
+
             count--;
 
             return true;
@@ -138,7 +131,6 @@ bool WaitingList::dequeueForResource(
         previous = current;
         current = current->next;
     }
-
 
 
     return false;
@@ -179,6 +171,7 @@ void WaitingList::displayWaitingList() const {
 
 
         current = current->next;
+
         position++;
     }
 }
@@ -189,6 +182,7 @@ bool WaitingList::isEmpty() const {
 
     return front == nullptr;
 }
+
 
 
 int WaitingList::getCount() const {
