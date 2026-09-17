@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <limits>
-
 #include "Resource.h"
 #include "ReservationList.h"
 #include "CancellationHistory.h"
@@ -57,7 +56,6 @@ int main() {
     const std::string dataFile = "resources.txt";
 
 
-
     if (!resourceManager.loadFromFile(dataFile)) {
 
         std::cout << "Could not load '"
@@ -108,14 +106,12 @@ int main() {
             }
 
 
-
             case 2: {
 
                 resourceManager.displayAvailability();
 
                 break;
             }
-
 
             case 3: {
 
@@ -163,8 +159,13 @@ int main() {
                 Resource* res =
                     resourceManager.findResource(resourceID);
 
+                int reservationsForSlot =
+                    reservationList.countReservationsForSlot(
+                        resourceID,
+                        timeSlot
+                    );
 
-                if (res->availableCount <= 0) {
+                if (reservationsForSlot >= res->totalCapacity) {
 
                     waitingList.enqueue(
                         studentID,
@@ -176,7 +177,8 @@ int main() {
                     std::cout
                         << "Resource '"
                         << resourceID
-                        << "' is fully booked.\n";
+                        << "' is fully booked for "
+                        << timeSlot << ".\n";
 
 
                     std::cout
@@ -191,11 +193,6 @@ int main() {
                     generateReservationID(
                         reservationCounter
                     );
-
-
-                resourceManager.decrementAvailability(
-                    resourceID
-                );
 
 
                 reservationList.insertReservation(
@@ -214,7 +211,6 @@ int main() {
 
                 break;
             }
-
 
             case 4: {
 
@@ -252,10 +248,6 @@ int main() {
                     removed
                 );
 
-                resourceManager.incrementAvailability(
-                    removed.resourceID
-                );
-
 
                 std::cout
                     << "Reservation '"
@@ -265,6 +257,7 @@ int main() {
 
                 std::cout
                     << "Reservation added to cancellation history.\n";
+
 
                 WaitingNode nextStudent;
 
@@ -278,11 +271,6 @@ int main() {
                         generateReservationID(
                             reservationCounter
                         );
-
-
-                    resourceManager.decrementAvailability(
-                        nextStudent.resourceID
-                    );
 
 
                     reservationList.insertReservation(
@@ -316,7 +304,6 @@ int main() {
                 break;
             }
 
-
             case 6: {
 
                 waitingList.displayWaitingList();
@@ -324,14 +311,12 @@ int main() {
                 break;
             }
 
-
             case 7: {
 
                 cancellationHistory.displayHistory();
 
                 break;
             }
-
 
             case 8: {
 
@@ -365,29 +350,29 @@ int main() {
                         restored
                     );
 
-
                     break;
                 }
 
-                if (res->availableCount <= 0) {
+                int reservationsForSlot =
+                    reservationList.countReservationsForSlot(
+                        restored.resourceID,
+                        restored.timeSlot
+                    );
+
+
+                if (reservationsForSlot >= res->totalCapacity) {
 
                     std::cout
                         << "Could not restore reservation. "
-                        << "Resource is currently unavailable.\n";
+                        << "The original time slot is currently full.\n";
 
 
                     cancellationHistory.pushCancellation(
                         restored
                     );
 
-
                     break;
                 }
-
-
-                resourceManager.decrementAvailability(
-                    restored.resourceID
-                );
 
 
                 reservationList.insertReservation(
