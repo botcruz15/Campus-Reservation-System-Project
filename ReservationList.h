@@ -26,7 +26,9 @@ public:
                             const std::string& timeSlot);
     bool removeReservation(const std::string& reservationID, ReservationNode& removedOut);
     bool findReservation(const std::string& reservationID, ReservationNode& out) const;
-    bool exists(const std::string& reservationID) const;
+    bool exists(const std::string& reservationID, 
+                const std::string& timeSlot     
+            ) const;
     void displayReservations() const;
     int getCount() const;
 };
