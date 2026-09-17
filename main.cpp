@@ -264,6 +264,7 @@ int main() {
 
                 if (waitingList.dequeueForResource(
                         removed.resourceID,
+                        removed.timeSlot,
                         nextStudent)) {
 
 
