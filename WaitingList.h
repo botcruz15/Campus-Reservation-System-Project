@@ -52,6 +52,7 @@ public:
   
     bool dequeueForResource(
         const std::string& resourceID,
+        const std::string& timeSlot,
         WaitingNode& removedStudent
     );
 
