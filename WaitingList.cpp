@@ -89,6 +89,7 @@ bool WaitingList::dequeue(
 
 bool WaitingList::dequeueForResource(
     const std::string& resourceID,
+    const std::string& timeSlot,
     WaitingNode& removedStudent) {
 
     if (front == nullptr) {
