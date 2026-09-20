@@ -2,32 +2,28 @@
 
 ## Tyler
 
-Tyler worked on the **Resource Management** and **Reservation Management** portions of the project. His part focused on handling the resources used by the reservation system and the basic reservation functions. This included loading resource information from the resource file, storing the resources, displaying them, and handling resource availability.
+Tyler was responsible for the Resource Management and Reservation Management parts of the project. He handled most of the functions dealing with resources and reservations. This included loading the resources from the file, storing and displaying them, and checking if a resource was available.
 
-He also worked on creating and cancelling reservations, displaying active reservations, and validating reservation requests. These parts were later connected with the linked list, waiting list, and cancellation history portions of the program.
+For the reservation side, Tyler handled creating and cancelling reservations, displaying current reservations, and making sure reservation requests were valid. His part was later connected with the linked list, waiting list, and cancellation history when we combined everyone's code.
 
 ## Samah
 
-Samah worked on the **Linked List Implementation** and **Waiting List Implementation**. The linked list is used to keep track of the active reservations in the system. Her portion included inserting reservations, removing reservations, going through the reservation records, and displaying them.
+Samah focused mainly on the Linked List and Waiting List portions of the project. The linked list was used to store and keep track of active reservations. She handled adding and removing reservations from the list, going through the reservation records, and displaying reservation information.
 
-She also worked on the queue for the waiting list. The waiting list keeps students in order when a resource and time slot is already full so that the first student waiting can be handled first when space becomes available.
+For the waiting list, she implemented the queue used when a resource and time slot reaches its capacity. The queue keeps students in order so the first student added is the first one considered when a spot becomes available.
 
 ## Roland
 
-Roland worked on the **Cancellation History**, **Complexity Analysis**, and **GitHub Collaboration** portions of the project. For cancellation history, he worked on the stack that stores cancelled reservations and allows the most recently cancelled reservation to be restored.
+Roland handled the Cancellation History, Complexity Analysis, and GitHub side of the project. For the cancellation history, he created the stack used to keep track of cancelled reservations. This allows the program to store cancellations and restore the most recently cancelled reservation using the undo option.
 
-He also completed the complexity analysis for reservation insertion, reservation removal, waiting-list processing, and undo cancellation.
+He also completed the complexity analysis for the main operations in the program. This included reservation insertion, reservation removal, waiting list processing, and undo cancellation.
 
-Roland also served as the **group lead** and worked on bringing the different parts of the project together. After the code was combined, he debugged and tested the program on the UNT CELL server.
+Roland also took the role of group lead and helped bring everyone's code together into the final project. Once everything was merged, he tested and debugged the program on the UNT CELL server. This included testing reservation creation and cancellation, different resource capacities, the FIFO order of the waiting list, moving a student from the waiting list after a cancellation, the undo option, and invalid inputs.
 
-Testing included creating and cancelling reservations, testing resources with different capacities, checking the FIFO order of the waiting list, automatically assigning a waiting student after a cancellation, testing the undo feature, and checking invalid input.
-
-He also helped manage the GitHub repository and kept the main version of the project updated as the different portions were combined.
+He also managed the GitHub repository during the final integration and made sure the most recent version of the project was pushed to the repository.
 
 # Final Integration and Testing
 
-After the different components were put together, the group checked that the main features worked as one system. The final program was compiled and run on the UNT CSE CELL machines.
+Once we had everyone's parts together, we tested the program to make sure everything worked correctly as one system. We compiled and ran the final version on the UNT CSE CELL machines.
 
-Testing was done for file input, reservation creation and cancellation, resource capacity, waiting lists, cancellation history, undo functionality, and invalid input.
-
-The final project files were then prepared to match the version stored in the team's GitHub repository.
+We tested loading the resource file, creating and cancelling reservations, different resource capacities, the waiting list, cancellation history, the undo option, and invalid inputs. After fixing the issues we found, we made sure the final project files matched the completed version in our GitHub repository.
