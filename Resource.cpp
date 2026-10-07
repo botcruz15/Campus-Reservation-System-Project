@@ -19,18 +19,15 @@ bool ResourceManager::loadFromFile(const std::string& filename) {
         std::cerr << "Error: could not open resource file '" << filename << "'\n";
         return false;
     }
-
     resources.clear();
     std::string line;
     while (std::getline(file, line)) {
         if (line.empty() || line[0] == '#') continue;
-
         std::vector<std::string> fields = splitCSV(line);
         if (fields.size() < 4) {
             std::cerr << "Warning: skipping malformed line: " << line << "\n";
             continue;
         }
-
         Resource r;
         r.id = fields[0];
         r.name = fields[1];
@@ -44,7 +41,6 @@ bool ResourceManager::loadFromFile(const std::string& filename) {
         r.availableCount = r.totalCapacity;
         resources.push_back(r);
     }
-
     file.close();
     return true;
 }
@@ -93,4 +89,17 @@ bool ResourceManager::incrementAvailability(const std::string& resourceID) {
 
 int ResourceManager::getResourceCount() const {
     return static_cast<int>(resources.size());
+}
+
+// NEW: copy of the resource vector. Callers can sort the copy freely.
+std::vector<Resource> ResourceManager::getAllResources() const {
+    return resources;
+}
+
+// NEW: count one more request for this resource. Returns false for an unknown ID.
+bool ResourceManager::recordRequest(const std::string& resourceID) {
+    Resource* r = findResource(resourceID);
+    if (!r) return false;
+    r->requestCount++;
+    return true;
 }
