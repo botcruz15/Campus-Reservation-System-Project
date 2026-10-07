@@ -103,3 +103,4 @@ bool ResourceManager::recordRequest(const std::string& resourceID) {
     r->requestCount++;
     return true;
 }
+
