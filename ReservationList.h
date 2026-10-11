@@ -38,11 +38,6 @@ public:
         ReservationNode& out
     ) const;
 
-  
-    std::vector<ReservationNode> findReservationsByStudent(
-        const std::string& studentID
-    ) const;
-
     bool exists(
         const std::string& reservationID
     ) const;
@@ -57,6 +52,7 @@ public:
     int getCount() const;
 
     std::vector<ReservationNode> getAllReservations() const;
+
 
     bool hasReservation(
         const std::string& studentID,
