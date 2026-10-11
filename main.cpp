@@ -36,6 +36,75 @@ static void clearInputError() {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
+static void mergeResources(std::vector<Resource>& items,
+                           std::vector<Resource>& temporary,
+                           std::size_t left,
+                           std::size_t middle,
+                           std::size_t right) {
+    std::size_t i = left;
+    std::size_t j = middle;
+    std::size_t k = left;
+
+    while (i < middle && j < right) {
+        if (items[i].name <= items[j].name) {
+            temporary[k++] = items[i++];
+        } else {
+            temporary[k++] = items[j++];
+        }
+    }
+
+    while (i < middle) {
+        temporary[k++] = items[i++];
+    }
+
+    while (j < right) {
+        temporary[k++] = items[j++];
+    }
+
+    for (std::size_t index = left; index < right; ++index) {
+        items[index] = temporary[index];
+    }
+}
+
+static void mergeSortResources(std::vector<Resource>& items,
+                               std::vector<Resource>& temporary,
+                               std::size_t left,
+                               std::size_t right) {
+    if (right - left <= 1) {
+        return;
+    }
+
+    std::size_t middle = left + (right - left) / 2;
+
+    mergeSortResources(items, temporary, left, middle);
+    mergeSortResources(items, temporary, middle, right);
+    mergeResources(items, temporary, left, middle, right);
+}
+
+static void displayResourcesSortedByName(
+    const ResourceManager& resourceManager) {
+
+    std::vector<Resource> sorted = resourceManager.getAllResources();
+
+    if (sorted.empty()) {
+        std::cout << "No resources loaded.\n";
+        return;
+    }
+
+    std::vector<Resource> temporary(sorted.size());
+    mergeSortResources(sorted, temporary, 0, sorted.size());
+
+    std::cout << "\n--- Resources Sorted by Name ---\n";
+
+    for (const Resource& resource : sorted) {
+        std::cout << "ID: " << resource.id
+                  << " | Name: " << resource.name
+                  << " | Type: " << resource.type
+                  << " | Capacity: " << resource.totalCapacity
+                  << " | Available: " << resource.availableCount
+                  << "\n";
+    }
+}
 
 int main() {
     ResourceManager resourceManager;
