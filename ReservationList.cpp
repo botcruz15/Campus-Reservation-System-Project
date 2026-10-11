@@ -71,24 +71,6 @@ bool ReservationList::findReservation(
     return false;
 }
 
-std::vector<ReservationNode> ReservationList::findReservationsByStudent(
-    const std::string& studentID) const {
-    std::vector<ReservationNode> matches;
-    ReservationNode* current = head;
-
-    while (current != nullptr) {
-        if (current->studentID == studentID) {
-            ReservationNode copy = *current;
-            copy.next = nullptr;
-            matches.push_back(copy);
-        }
-
-        current = current->next;
-    }
-
-    return matches;
-}
-
 bool ReservationList::exists(
     const std::string& reservationID) const {
     ReservationNode temp;
@@ -141,18 +123,17 @@ int ReservationList::getCount() const {
     return count;
 }
 
-
+std::vector<ReservationNode> ReservationList::getAllReservations() const {
     std::vector<ReservationNode> all;
     ReservationNode* current = head;
     while (current != nullptr) {
         ReservationNode copy = *current;
-        copy.next = nullptr;     
+        copy.next = nullptr;         
         all.push_back(copy);
         current = current->next;
     }
     return all;
 }
-
 
 bool ReservationList::hasReservation(
     const std::string& studentID,
