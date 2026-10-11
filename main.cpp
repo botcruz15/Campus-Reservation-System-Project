@@ -20,6 +20,8 @@ static void printMenu() {
     std::cout << " 3. Create a reservation\n";
     std::cout << " 4. Cancel a reservation\n";
     std::cout << " 5. Display active reservations\n";
+    std::cout << " 6. Search resource by ID\n";
+    std::cout << " 7. Display resources sorted by name\n";
     std::cout << " 0. Exit\n";
     std::cout << "Enter your choice: ";
 }
@@ -121,6 +123,37 @@ int main() {
             }
             case 5: {
                 reservationList.displayReservations();
+                break;
+            }
+            case 6: {
+                std::cout << "Enter resource ID to search: ";
+                std::string resourceID = readLine();
+
+                if (resourceID.empty()) {
+                std::cout << "Error: resource ID is required.\n";
+                break;
+                }
+
+                Resource* resource = resourceManager.findResource(resourceID);
+
+                if (resource == nullptr) {
+                std::cout << "No resource found with ID '"
+                      << resourceID << "'.\n";
+                } else {
+                std::cout << "\n--- Resource Found ---\n";
+                std::cout << "ID: " << resource->id
+                      << " | Name: " << resource->name
+                  << " | Type: " << resource->type
+                  << " | Capacity: " << resource->totalCapacity
+                  << " | Available: " << resource->availableCount
+                  << "\n";
+                }
+
+                break;
+                }
+
+            case 7: {
+                displayResourcesSortedByName(resourceManager);
                 break;
             }
             case 0: {
