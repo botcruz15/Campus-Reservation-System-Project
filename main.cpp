@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <vector>
 #include "Resource.h"
 #include "ReservationList.h"
 
