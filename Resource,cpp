@@ -94,3 +94,6 @@ bool ResourceManager::incrementAvailability(const std::string& resourceID) {
 int ResourceManager::getResourceCount() const {
     return static_cast<int>(resources.size());
 }
+std::vector<Resource> ResourceManager::getAllResources() const {
+    return resources;
+}
