@@ -38,6 +38,11 @@ public:
         ReservationNode& out
     ) const;
 
+  
+    std::vector<ReservationNode> findReservationsByStudent(
+        const std::string& studentID
+    ) const;
+
     bool exists(
         const std::string& reservationID
     ) const;
@@ -51,11 +56,8 @@ public:
 
     int getCount() const;
 
-    // NEW: copy every active reservation into a vector (next pointers set to nullptr).
-    // Searching, sorting and reports work on this copy so the linked list is never changed.
     std::vector<ReservationNode> getAllReservations() const;
 
-    // NEW: true if this student already holds this resource/time slot (duplicate-request check)
     bool hasReservation(
         const std::string& studentID,
         const std::string& resourceID,
