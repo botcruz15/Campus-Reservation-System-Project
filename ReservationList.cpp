@@ -71,6 +71,24 @@ bool ReservationList::findReservation(
     return false;
 }
 
+std::vector<ReservationNode> ReservationList::findReservationsByStudent(
+    const std::string& studentID) const {
+    std::vector<ReservationNode> matches;
+    ReservationNode* current = head;
+
+    while (current != nullptr) {
+        if (current->studentID == studentID) {
+            ReservationNode copy = *current;
+            copy.next = nullptr;
+            matches.push_back(copy);
+        }
+
+        current = current->next;
+    }
+
+    return matches;
+}
+
 bool ReservationList::exists(
     const std::string& reservationID) const {
     ReservationNode temp;
@@ -123,21 +141,19 @@ int ReservationList::getCount() const {
     return count;
 }
 
-// NEW: walk the linked list once and copy each node into a vector.
-// The list is newest-first (insertion is at the head), so the vector is too.
-std::vector<ReservationNode> ReservationList::getAllReservations() const {
+
     std::vector<ReservationNode> all;
     ReservationNode* current = head;
     while (current != nullptr) {
         ReservationNode copy = *current;
-        copy.next = nullptr;          // the copy must not point into the live list
+        copy.next = nullptr;     
         all.push_back(copy);
         current = current->next;
     }
     return all;
 }
 
-// NEW: used to reject a student booking the same resource/time slot twice.
+
 bool ReservationList::hasReservation(
     const std::string& studentID,
     const std::string& resourceID,
